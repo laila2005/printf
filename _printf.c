@@ -1,67 +1,48 @@
-#include "main.h"
-#include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
 
+/**
+ * _printf - Produces output according to a format
+ * @format: A character string composed of zero or more directives
+ *
+ * Return: The number of characters printed
+ */
 int _printf(const char *format, ...)
 {
-    va_list args;
-    int count = 0;
-    const char *p;
+va_list args;
+int count = 0;
+const char *p;
 
-    if (format == NULL)
-    {
-        return -1;
-    }
+if (!format)
+return (-1);
 
-    va_start(args, format);
-    for (p = format; *p != '\0'; p++)
-    {
-        if (*p == '%')
-	{
-            p++;
-            switch (*p)
-	    {
-                case 'c':
-			{
-                    char ch = (char)va_arg(args, int);
-                    write(1, &ch, 1);
-                    count++;
-                    break;
-                }
-                case 's':
-			{
-                    char *str = va_arg(args, char *);
-                    if (str == NULL)
-		    {
-                        str = "(null)";
-                    }
-                    while (*str != '\0')
-		    {
-                        write(1, str, 1);
-                        str++;
-                        count++;
-                    }
-                    break;
-                }
-                case '%': {
-                    write(1, "%", 1);
-                    count++;
-                    break;
-                }
-                default:
- 
-                    write(1, "%", 1);
-                    write(1, p, 1);
-                    count += 2;
-                    break;
-            }
-        } else
-	{
-            write(1, p, 1);
-            count++;
-        }
-    }
-    va_end(args);
-    return count;
+va_start(args, format);
+for (p = format; *p; p++)
+{
+if (*p == '%')
+{
+p++;
+if (*p == 'c')
+{
+char ch = va_arg(args, int);
+write(1, &ch, 1), count++;
+}
+else if (*p == 's')
+{
+char *str = va_arg(args, char *);
+if (!str)
+str = "(null)";
+while (*str)
+write(1, str++, 1), count++;
+}
+else if (*p == '%')
+write(1, p, 1), count++;
+else
+write(1, "%", 1), write(1, p, 1), count += 2;
+}
+else
+write(1, p, 1), count++;
+}
+va_end(args);
+return (count);
 }
