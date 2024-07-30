@@ -1,13 +1,12 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include "main.h"
-
 /**
-* _printf - Produces output according to a format
-* @format: A character string composed of zero or more directives
-*
-* Return: The number of characters printed (excluding null byte)
-*/
+ * _printf - Produces output according to a format
+ * @format: A character string composed of zero or more directives
+ *
+ * Return: The number of characters printed
+ */
 int _printf(const char *format, ...)
 {
 va_list args;
@@ -24,7 +23,10 @@ if (*p == '%')
 {
 p++;
 if (*p == 'c')
-write(1, &(char){va_arg(args, int)}, 1), count++;
+{
+char ch = va_arg(args, int);
+write(1, &ch, 1), count++;
+}
 else if (*p == 's')
 {
 char *str = va_arg(args, char *);
